@@ -38,7 +38,7 @@ export default function CTABox() {
             </div>
             <h3 className="text-xl font-bold text-green-800">Purchase Confirmed!</h3>
             <p className="text-green-700">
-              Your North Beach Coit Tower collectible has been secured.
+              Your Coit Cigs collectible has been secured.
             </p>
             <div className="bg-white p-4 rounded-lg border border-green-200">
               <p className="text-lg font-bold text-gray-800">
@@ -61,40 +61,55 @@ export default function CTABox() {
   }
 
   return (
-    <div className={`fixed right-4 top-1/2 -translate-y-1/2 z-10 transition-transform duration-700 ease-out ${
+    <div className={`fixed right-6 top-1/2 -translate-y-1/2 z-20 transition-transform duration-700 ease-out ${
       isVisible ? 'translate-x-0' : 'translate-x-full'
     }`}>
-      <div className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-2xl max-w-sm pointer-events-auto border border-gray-200">
-        <div className="space-y-4">
+      <div className="backdrop-blur-md bg-gradient-to-br from-white/20 to-white/10 p-6 rounded-3xl shadow-2xl max-w-sm pointer-events-auto border border-white/30 ring-1 ring-white/20">
+        <div className="space-y-5">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800">HotDrops</h2>
-            <p className="text-sm text-gray-600">North Beach Coit Tower</p>
+            <h2 className="text-2xl font-bold text-white mb-3">Coit Cigs</h2>
           </div>
 
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Limited Edition</h3>
-            <p className="text-sm text-gray-600 mb-3">
-              Iconic Coit Tower 3D printed collectible with unique serial number
+          <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-4 rounded-2xl border border-blue-400/20">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-3 h-3 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"></div>
+              <h3 className="text-lg font-semibold text-white">Limited Edition</h3>
+            </div>
+            <p className="text-sm text-blue-100 mb-3">
+              Premium 3D printed collectible with laser-engraved serial number
             </p>
-            <div className="flex justify-between items-center text-xs text-gray-500">
-              <span>Starting at $49.99</span>
-              <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full">
-                Only 187 left!
-              </span>
+            <div className="flex justify-between items-center">
+              <div className="text-xl font-bold text-white">$49.99</div>
+              <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                63 LEFT
+              </div>
             </div>
           </div>
 
           <button
             onClick={handlePurchase}
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white py-4 px-6 rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 transition-all duration-300 font-bold text-lg shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            {isLoading ? 'Processing...' : 'Purchase Coit Tower'}
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Processing...
+              </div>
+            ) : (
+              'Secure Collectible'
+            )}
           </button>
 
-          <p className="text-xs text-gray-500 text-center">
-            ✨ Your unique serial number will be revealed after purchase
-          </p>
+          <div className="text-center space-y-1">
+            <p className="text-xs text-blue-200 font-medium">
+              ✨ Unique serial revealed after purchase
+            </p>
+            <div className="flex items-center justify-center gap-1 text-xs text-white/70">
+              <span>🔒</span>
+              <span>Powered by Stripe</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
