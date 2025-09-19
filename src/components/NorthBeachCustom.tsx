@@ -39,10 +39,8 @@ const NorthBeachCustom = React.forwardRef<THREE.Group>((props, ref) => {
           child.castShadow = true;
           child.receiveShadow = true;
 
-          // Check if this is a building mesh (you may need to adjust this condition)
-          if (child.name.toLowerCase().includes('building') ||
-              child.name.toLowerCase().includes('house') ||
-              child.name.toLowerCase().includes('structure')) {
+          // Check if this is the buildings mesh specifically
+          if (child.name === 'buildings') {
 
             // Clone the material to avoid modifying shared materials
             if (child.material) {

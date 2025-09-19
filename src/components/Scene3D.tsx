@@ -2,6 +2,7 @@
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
+import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-three/postprocessing';
 import { Suspense, useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { Vector3 } from 'three';
@@ -11,8 +12,8 @@ import CTABox from './CTABox';
 
 function CameraAnimation() {
   const { camera } = useThree();
-  const startPosition = useRef(new Vector3(-15, 15, 20));
-  const targetPosition = useRef(new Vector3(0, 1, 2));
+  const startPosition = useRef(new Vector3(-10, 15, 15));
+  const targetPosition = useRef(new Vector3(-2, 1, 2));
   const animationProgress = useRef(0);
   const isAnimating = useRef(true);
 
@@ -71,10 +72,11 @@ function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
 
   useFrame((state) => {
     const time = state.clock.elapsedTime * speed;
-    const radius = 20;
+    const radius = 30;
 
     // Vertical rotation around scene for day/night cycle with offset
-    const angle = time;
+    // Sun now takes moon's previous position (rotated back 30 degrees)
+    const angle = time - (30 * Math.PI / 180);
     const x = Math.cos(angle) * radius + 3; // Offset from center
     const y = Math.sin(angle) * radius + 2; // Slight vertical offset
     const z = 2; // Offset from center depth
@@ -92,14 +94,19 @@ function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
       glowRef.current.lookAt(state.camera.position);
     }
 
-    // Update directional light position pointing towards origin
+    // Update directional light position - 20 degrees ahead of visual sun
     if (lightRef.current) {
-      lightRef.current.position.set(x, y, z);
+      const lightAngle = angle + (20 * Math.PI / 180); // 20 degrees ahead in orbit
+      const lightX = Math.cos(lightAngle) * radius + 3;
+      const lightY = Math.sin(lightAngle) * radius + 2;
+      const lightZ = 2;
+
+      lightRef.current.position.set(lightX, lightY, lightZ);
       lightRef.current.target.position.set(0, 0, 0);
       lightRef.current.target.updateMatrixWorld();
 
-      // Intensity based on height - only when above horizon (y > 0)
-      const intensityMultiplier = Math.max(0, y / radius);
+      // Intensity based on light height - only when above horizon (lightY > 0)
+      const intensityMultiplier = Math.max(0, lightY / radius);
       lightRef.current.intensity = 2.5 * intensityMultiplier;
     }
 
@@ -108,38 +115,54 @@ function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
     const dayIntensity = Math.max(0, sunHeight);
     const nightIntensity = Math.max(0, -sunHeight);
 
-    // Update scene background color for day/night with smoother transitions
+    // Update scene background color with natural day/night progression
     if (scene.background instanceof THREE.Color) {
-      // Smooth transition from night to day with muted colors
-      const dayColor = new THREE.Color('#6B9DC2'); // Muted sky blue
-      const sunsetColor = new THREE.Color('#D4824A'); // Muted orange sunset
-      const nightColor = new THREE.Color('#0A0A15'); // Darker night
+      // Natural sky color progression
+      const sunriseColor = new THREE.Color('#FF6B6B'); // Soft red sunrise
+      const morningColor = new THREE.Color('#87CEEB'); // Sky blue morning
+      const noonColor = new THREE.Color('#87CEFA'); // Light sky blue noon
+      const eveningColor = new THREE.Color('#FFA500'); // Orange evening
+      const sunsetColor = new THREE.Color('#FF4500'); // Red orange sunset
+      const twilightColor = new THREE.Color('#8A2BE2'); // Blue violet twilight
+      const nightColor = new THREE.Color('#0B0B0F'); // Very dark blue night
 
       let targetColor;
-      if (sunHeight > 0.8) {
-        // High noon - pure day
-        targetColor = dayColor;
+
+      // Sun above horizon (day cycle)
+      if (sunHeight > 0.7) {
+        // High noon
+        targetColor = noonColor;
+      } else if (sunHeight > 0.3) {
+        // Morning to noon
+        const t = (sunHeight - 0.3) / 0.4;
+        targetColor = new THREE.Color().lerpColors(morningColor, noonColor, t);
       } else if (sunHeight > 0.1) {
-        // Daytime - blend day to sunset
-        const t = (sunHeight - 0.1) / 0.7;
-        targetColor = new THREE.Color().lerpColors(sunsetColor, dayColor, t);
-      } else if (sunHeight > -0.1) {
-        // Sunset/sunrise - orange glow
-        targetColor = sunsetColor;
-      } else if (sunHeight > -0.8) {
-        // Twilight - blend sunset to night
-        const t = (sunHeight + 0.8) / 0.7;
-        targetColor = new THREE.Color().lerpColors(nightColor, sunsetColor, t);
+        // Late morning
+        const t = (sunHeight - 0.1) / 0.2;
+        targetColor = new THREE.Color().lerpColors(sunriseColor, morningColor, t);
+      } else if (sunHeight > 0.0) {
+        // Just at sunrise
+        targetColor = sunriseColor;
+      }
+      // Sun below horizon (night cycle)
+      else if (sunHeight > -0.1) {
+        // Immediate twilight after sunset
+        const t = (sunHeight + 0.1) / 0.1;
+        targetColor = new THREE.Color().lerpColors(twilightColor, sunriseColor, t);
+      } else if (sunHeight > -0.3) {
+        // Early night
+        const t = (sunHeight + 0.3) / 0.2;
+        targetColor = new THREE.Color().lerpColors(nightColor, twilightColor, t);
       } else {
-        // Deep night
+        // Deep night - stays dark
         targetColor = nightColor;
       }
 
-      // Smooth lerp to target color
-      scene.background.lerp(targetColor, 0.02);
+      // Smooth color transition
+      scene.background.lerp(targetColor, 0.015);
     } else {
-      // Set initial background if not set
-      scene.background = new THREE.Color('#6B9DC2');
+      // Set initial background
+      scene.background = new THREE.Color('#FF6B6B');
     }
   });
 
@@ -147,7 +170,7 @@ function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
     <>
       {/* Visual sun */}
       <mesh ref={sunRef}>
-        <sphereGeometry args={[2, 32, 32]} />
+        <sphereGeometry args={[8, 32, 32]} />
         <meshBasicMaterial
           color="#FFD700"
         />
@@ -179,10 +202,11 @@ function OrbitingMoon({ speed = 0.05 }: { speed?: number }) {
 
   useFrame((state) => {
     const time = state.clock.elapsedTime * speed;
-    const radius = 18;
+    const radius = 25;
 
-    // Moon rotates vertically opposite to sun for day/night cycle with offset
-    const angle = time + Math.PI;
+    // Moon rotates directly opposite to sun (180 degrees apart)
+    const sunAngle = time - (30 * Math.PI / 180); // Sun's current angle
+    const angle = sunAngle + Math.PI; // Moon is 180 degrees opposite
     const x = Math.cos(angle) * radius - 2; // Different offset from sun
     const y = Math.sin(angle) * radius + 1; // Slight vertical offset
     const z = -1; // Different depth offset
@@ -204,9 +228,9 @@ function OrbitingMoon({ speed = 0.05 }: { speed?: number }) {
       lightRef.current.target.position.set(0, 0, 0);
       lightRef.current.target.updateMatrixWorld();
 
-      // Moonlight intensity - only when above horizon (y > 0), less intense than sun
+      // Moonlight intensity - only when above horizon (y > 0), brighter than before
       const intensityMultiplier = Math.max(0, y / radius);
-      lightRef.current.intensity = 0.5 * intensityMultiplier;
+      lightRef.current.intensity = 1.5 * intensityMultiplier;
     }
   });
 
@@ -215,7 +239,7 @@ function OrbitingMoon({ speed = 0.05 }: { speed?: number }) {
 
       {/* Visual moon */}
       <mesh ref={moonRef}>
-        <sphereGeometry args={[1, 32, 32]} />
+        <sphereGeometry args={[4, 32, 32]} />
         <meshStandardMaterial
           color="#ffffff"
           emissive="#f5f5f5"
@@ -223,10 +247,10 @@ function OrbitingMoon({ speed = 0.05 }: { speed?: number }) {
         />
       </mesh>
 
-      {/* Soft moonlight */}
+      {/* Brighter moonlight */}
       <directionalLight
         ref={lightRef}
-        intensity={0.4}
+        intensity={1.2}
         color="#b3ccff"
         castShadow
         shadow-mapSize={[2048, 2048]}
@@ -257,13 +281,28 @@ export default function Scene3D() {
       >
         <Suspense fallback={null}>
           <CameraAnimation />
-          <OrbitingSun speed={1} />
-          <OrbitingMoon speed={1} />
+          <OrbitingSun speed={.1} />
+          <OrbitingMoon speed={.1} />
           {/* <fogExp2 attach="fog" args={['#1e293b', 0.15]} /> */}
           <DynamicAmbientLight speed={0.05} />
 
 
           <NorthBeachModel />
+
+          {/* Soft spotlight on Coit Tower at 0,0,0 */}
+          <spotLight
+            position={[2, 5, 2]}
+            target-position={[0, 0, 0]}
+            angle={Math.PI / 6}
+            penumbra={0.8}
+            intensity={2}
+            color="#fff8dc"
+            castShadow
+            shadow-mapSize={[1024, 1024]}
+            shadow-camera-near={0.1}
+            shadow-camera-far={20}
+            shadow-bias={-0.0001}
+          />
 
           <OrbitControls
             target={[0, 0, 0]}
@@ -276,6 +315,22 @@ export default function Scene3D() {
             autoRotate
             autoRotateSpeed={0.2}
           />
+
+          <EffectComposer>
+            <DepthOfField
+              focusDistance={0.0}
+              focalLength={0.03}
+              bokehScale={10}
+              height={720}
+            />
+            <Bloom
+              intensity={0.03}
+              luminanceThreshold={0.9}
+              luminanceSmoothing={0.9}
+            />
+            <Noise opacity={0.01} />
+            <Vignette eskil={false} offset={0.1} darkness={0.5} />
+          </EffectComposer>
         </Suspense>
       </Canvas>
 
@@ -283,7 +338,7 @@ export default function Scene3D() {
       <div className="absolute top-6 left-6 z-10">
         <div className="backdrop-blur-md bg-white/10 p-4 rounded-2xl border border-white/20">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2">
-            HotDrops
+            wassuh
           </h1>
           <p className="text-blue-100 text-sm font-medium">
             Limited Runs. Infinite stories.
