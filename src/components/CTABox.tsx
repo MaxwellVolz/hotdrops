@@ -11,7 +11,7 @@ export default function CTABox() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 2000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -38,7 +38,7 @@ export default function CTABox() {
             </div>
             <h3 className="text-xl font-bold text-green-800">Purchase Confirmed!</h3>
             <p className="text-green-700">
-              Your Coit Cigs collectible has been secured.
+              Your Coit Cache collectible has been secured.
             </p>
             <div className="bg-white p-4 rounded-lg border border-green-200">
               <p className="text-lg font-bold text-gray-800">
@@ -61,13 +61,12 @@ export default function CTABox() {
   }
 
   return (
-    <div className={`fixed right-6 top-1/2 -translate-y-1/2 z-20 transition-transform duration-700 ease-out ${
-      isVisible ? 'translate-x-0' : 'translate-x-full'
-    }`}>
+    <div className={`fixed right-6 top-1/2 -translate-y-1/2 z-20 transition-transform duration-700 ease-out ${isVisible ? 'translate-x-0' : 'translate-x-full'
+      }`}>
       <div className="backdrop-blur-md bg-gradient-to-br from-white/20 to-white/10 p-6 rounded-3xl shadow-2xl max-w-sm pointer-events-auto border border-white/30 ring-1 ring-white/20">
         <div className="space-y-5">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-white mb-3">Coit Cigs</h2>
+            <h2 className="text-2xl font-bold text-white mb-3">Coit Cache</h2>
           </div>
 
           <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-4 rounded-2xl border border-blue-400/20">
