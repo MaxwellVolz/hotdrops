@@ -1,8 +1,9 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, Center } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import { Suspense, useRef, useEffect } from 'react';
+import * as THREE from 'three';
 import { Vector3 } from 'three';
 import NorthBeachModel from './NorthBeachModel';
 import LoadingSpinner from './LoadingSpinner';
@@ -36,6 +37,212 @@ function CameraAnimation() {
   return null;
 }
 
+function DynamicAmbientLight({ speed = 0.05 }: { speed?: number }) {
+  const lightRef = useRef<THREE.AmbientLight>(null);
+
+  useFrame((state) => {
+    const time = state.clock.elapsedTime * speed;
+    const radius = 20;
+    const angle = time;
+    const y = Math.sin(angle) * radius;
+    const sunHeight = y / radius; // -1 to 1
+
+    if (lightRef.current) {
+      if (sunHeight > 0) {
+        // Day - subtle ambient light
+        lightRef.current.intensity = 0.05 * sunHeight + 0.01;
+        lightRef.current.color.setHex(0xffffff); // White light
+      } else {
+        // Night - very dim blue ambient light
+        lightRef.current.intensity = 0.005;
+        lightRef.current.color.setHex(0x4488ff); // Blue light
+      }
+    }
+  });
+
+  return <ambientLight ref={lightRef} intensity={0.01} />;
+}
+
+function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
+  const sunRef = useRef<THREE.Mesh>(null);
+  const lightRef = useRef<THREE.DirectionalLight>(null);
+  const glowRef = useRef<THREE.Mesh>(null);
+  const { scene } = useThree();
+
+  useFrame((state) => {
+    const time = state.clock.elapsedTime * speed;
+    const radius = 20;
+
+    // Vertical rotation around scene for day/night cycle with offset
+    const angle = time;
+    const x = Math.cos(angle) * radius + 3; // Offset from center
+    const y = Math.sin(angle) * radius + 2; // Slight vertical offset
+    const z = 2; // Offset from center depth
+
+    // Update sun visual position
+    if (sunRef.current) {
+      sunRef.current.position.set(x, y, z);
+      // Remove pulsing - keep constant scale
+      sunRef.current.scale.setScalar(1);
+    }
+
+    // Update sun glow
+    if (glowRef.current) {
+      glowRef.current.position.set(x, y, z);
+      glowRef.current.lookAt(state.camera.position);
+    }
+
+    // Update directional light position pointing towards origin
+    if (lightRef.current) {
+      lightRef.current.position.set(x, y, z);
+      lightRef.current.target.position.set(0, 0, 0);
+      lightRef.current.target.updateMatrixWorld();
+
+      // Intensity based on height - only when above horizon (y > 0)
+      const intensityMultiplier = Math.max(0, y / radius);
+      lightRef.current.intensity = 2.5 * intensityMultiplier;
+    }
+
+    // Day/night cycle effects
+    const sunHeight = y / radius; // -1 to 1
+    const dayIntensity = Math.max(0, sunHeight);
+    const nightIntensity = Math.max(0, -sunHeight);
+
+    // Update scene background color for day/night with smoother transitions
+    if (scene.background instanceof THREE.Color) {
+      // Smooth transition from night to day with muted colors
+      const dayColor = new THREE.Color('#6B9DC2'); // Muted sky blue
+      const sunsetColor = new THREE.Color('#D4824A'); // Muted orange sunset
+      const nightColor = new THREE.Color('#0A0A15'); // Darker night
+
+      let targetColor;
+      if (sunHeight > 0.8) {
+        // High noon - pure day
+        targetColor = dayColor;
+      } else if (sunHeight > 0.1) {
+        // Daytime - blend day to sunset
+        const t = (sunHeight - 0.1) / 0.7;
+        targetColor = new THREE.Color().lerpColors(sunsetColor, dayColor, t);
+      } else if (sunHeight > -0.1) {
+        // Sunset/sunrise - orange glow
+        targetColor = sunsetColor;
+      } else if (sunHeight > -0.8) {
+        // Twilight - blend sunset to night
+        const t = (sunHeight + 0.8) / 0.7;
+        targetColor = new THREE.Color().lerpColors(nightColor, sunsetColor, t);
+      } else {
+        // Deep night
+        targetColor = nightColor;
+      }
+
+      // Smooth lerp to target color
+      scene.background.lerp(targetColor, 0.02);
+    } else {
+      // Set initial background if not set
+      scene.background = new THREE.Color('#6B9DC2');
+    }
+  });
+
+  return (
+    <>
+      {/* Visual sun */}
+      <mesh ref={sunRef}>
+        <sphereGeometry args={[2, 32, 32]} />
+        <meshBasicMaterial
+          color="#FFD700"
+        />
+      </mesh>
+
+      {/* Dramatic directional light */}
+      <directionalLight
+        ref={lightRef}
+        intensity={4}
+        color="#FFF8DC"
+        castShadow
+        shadow-mapSize={[4096, 4096]}
+        shadow-camera-far={60}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
+        shadow-bias={-0.002}
+        shadow-normalBias={0.05}
+      />
+    </>
+  );
+}
+
+function OrbitingMoon({ speed = 0.05 }: { speed?: number }) {
+  const moonRef = useRef<THREE.Mesh>(null);
+  const lightRef = useRef<THREE.DirectionalLight>(null);
+  const glowRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const time = state.clock.elapsedTime * speed;
+    const radius = 18;
+
+    // Moon rotates vertically opposite to sun for day/night cycle with offset
+    const angle = time + Math.PI;
+    const x = Math.cos(angle) * radius - 2; // Different offset from sun
+    const y = Math.sin(angle) * radius + 1; // Slight vertical offset
+    const z = -1; // Different depth offset
+
+    // Update moon visual position
+    if (moonRef.current) {
+      moonRef.current.position.set(x, y, z);
+    }
+
+    // Update moon glow
+    if (glowRef.current) {
+      glowRef.current.position.set(x, y, z);
+      glowRef.current.lookAt(state.camera.position);
+    }
+
+    // Update moonlight
+    if (lightRef.current) {
+      lightRef.current.position.set(x, y, z);
+      lightRef.current.target.position.set(0, 0, 0);
+      lightRef.current.target.updateMatrixWorld();
+
+      // Moonlight intensity - only when above horizon (y > 0), less intense than sun
+      const intensityMultiplier = Math.max(0, y / radius);
+      lightRef.current.intensity = 0.5 * intensityMultiplier;
+    }
+  });
+
+  return (
+    <>
+
+      {/* Visual moon */}
+      <mesh ref={moonRef}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive="#f5f5f5"
+          emissiveIntensity={1.5}
+        />
+      </mesh>
+
+      {/* Soft moonlight */}
+      <directionalLight
+        ref={lightRef}
+        intensity={0.4}
+        color="#b3ccff"
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-far={60}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
+        shadow-bias={-0.001}
+        shadow-normalBias={0.02}
+      />
+    </>
+  );
+}
+
+
 export default function Scene3D() {
   return (
     <div className="w-full h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 relative overflow-hidden">
@@ -45,22 +252,16 @@ export default function Scene3D() {
 
       <Canvas
         camera={{ position: [0, 1, 2], fov: 80 }}
-        shadows
+        shadows={{ type: THREE.PCFSoftShadowMap }}
         className="w-full h-full"
       >
         <Suspense fallback={null}>
           <CameraAnimation />
-          <fogExp2 attach="fog" args={['#1e293b', 0.15]} />
-          <Environment preset="city" />
-          <ambientLight intensity={0.3} />
-          <directionalLight
-            position={[10, 10, 5]}
-            intensity={1.2}
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-          />
-          <pointLight position={[0, 10, 0]} intensity={0.5} color="#60a5fa" />
+          <OrbitingSun speed={1} />
+          <OrbitingMoon speed={1} />
+          {/* <fogExp2 attach="fog" args={['#1e293b', 0.15]} /> */}
+          <DynamicAmbientLight speed={0.05} />
+
 
           <NorthBeachModel />
 
