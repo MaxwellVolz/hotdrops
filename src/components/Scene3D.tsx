@@ -343,22 +343,17 @@ export default function Scene3D() {
       </Canvas>
 
       {/* Premium header */}
-      <div className="absolute top-6 left-6 z-10">
-        <div className="backdrop-blur-md bg-white/10 p-4 rounded-2xl border border-white/20">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2">
-            wassuh
+      <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
+        <div className="backdrop-blur-md bg-white/10 p-3 md:p-4 rounded-xl md:rounded-2xl border border-white/20">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1 flex items-start gap-2">
+            Coit Cache
+            <span className="text-[10px] md:text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-0.5 rounded-full font-bold">
+              LIMITED RUN
+            </span>
           </h1>
-          <p className="text-blue-100 text-sm font-medium">
-            Limited Runs. Infinite stories.
+          <p className="text-blue-100 text-xs md:text-sm font-medium">
+            Designed in and for SF
           </p>
-        </div>
-      </div>
-
-      {/* Traction indicators */}
-      <div className="absolute bottom-6 left-6 z-10 flex gap-4">
-        <div className="backdrop-blur-md bg-white/10 p-3 rounded-xl border border-white/20">
-          <div className="text-sm font-semibold text-white">187 Sold</div>
-          <div className="text-xs text-blue-200">This Month</div>
         </div>
       </div>
 
@@ -368,11 +363,12 @@ export default function Scene3D() {
         <CTABox />
       </Suspense>
 
-      <div className="absolute bottom-6 right-6 z-10">
-        <div className="backdrop-blur-md bg-white/10 p-3 rounded-xl border border-white/20">
-          <p className="text-xs text-blue-200">
-            🖱️ Drag to explore • 🔍 Scroll to zoom
-          </p>
+      <div className="absolute bottom-4 right-4 z-10">
+        <div className="backdrop-blur-md bg-white/10 px-2 py-1 rounded-lg border border-white/20">
+          <div className="flex items-center gap-1 text-[10px] text-white/50">
+            <span>🔒</span>
+            <span>Powered by Stripe</span>
+          </div>
         </div>
       </div>
     </div>
