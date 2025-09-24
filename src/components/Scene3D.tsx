@@ -343,16 +343,16 @@ export default function Scene3D() {
       </Canvas>
 
       {/* Premium header */}
-      <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
-        <div className="backdrop-blur-md bg-white/10 p-3 md:p-4 rounded-xl md:rounded-2xl border border-white/20">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1 flex items-start gap-2">
+      <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10 transition-all duration-500">
+        <div className="backdrop-blur-xl bg-gradient-to-br from-white/15 to-white/5 p-3 md:p-6 rounded-xl border border-white/10 shadow-2xl shadow-black/20 hover:shadow-black/30 transition-all duration-300">
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-1 md:mb-2 flex items-start gap-2 tracking-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
             Coit Cache
-            <span className="text-[10px] md:text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-0.5 rounded-full font-bold">
-              LIMITED RUN
+            <span className="text-[10px] md:text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-0.5 rounded-full font-bold animate-pulse shadow-lg shadow-orange-500/50">
+              69 left
             </span>
           </h1>
-          <p className="text-blue-100 text-xs md:text-sm font-medium">
-            Designed in and for SF
+          <p className="text-blue-100/90 text-xs md:text-sm font-medium tracking-wide" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.2)' }}>
+            Limited by Design
           </p>
         </div>
       </div>
@@ -363,8 +363,14 @@ export default function Scene3D() {
         <CTABox />
       </Suspense>
 
+      <div className="absolute top-4 right-4 md:top-6 md:right-6 z-10">
+        <div className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 px-3 py-2 rounded-xl border border-white/10 shadow-lg">
+          <p className="text-xs text-white/70 font-medium">Drag to explore</p>
+        </div>
+      </div>
+
       <div className="absolute bottom-4 right-4 z-10">
-        <div className="backdrop-blur-md bg-white/10 px-2 py-1 rounded-lg border border-white/20">
+        <div className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 px-2 py-1 rounded-xl border border-white/10 transition-all duration-300 hover:bg-white/15">
           <div className="flex items-center gap-1 text-[10px] text-white/50">
             <span>🔒</span>
             <span>Powered by Stripe</span>
