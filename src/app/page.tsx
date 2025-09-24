@@ -1,5 +1,10 @@
 import Scene3D from '@/components/Scene3D';
+import { LoadingProvider } from '@/contexts/LoadingContext';
 
 export default function Home() {
-  return <Scene3D />;
+  return (
+    <LoadingProvider>
+      <Scene3D />
+    </LoadingProvider>
+  );
 }

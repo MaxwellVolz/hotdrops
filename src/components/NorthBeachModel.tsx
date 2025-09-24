@@ -5,6 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 import { Model as NorthBeachGenerated } from './NorthBeachGenerated';
+import { useLoading } from '@/contexts/LoadingContext';
 
 // Light Easter/San Francisco inspired color palette for buildings (excluding whites)
 const softColors = [
@@ -25,6 +26,7 @@ const softColors = [
 export default function NorthBeachModel() {
   const groupRef = useRef<THREE.Group>(null);
   const modelRef = useRef<THREE.Group>(null);
+  const { setLoaded } = useLoading();
 
   // Load the GLB with animations
   const { animations } = useGLTF('/3d/north_beach_web.glb');
@@ -88,8 +90,12 @@ export default function NorthBeachModel() {
           }
         }
       });
+
+      setTimeout(() => {
+        setLoaded();
+      }, 500);
     }
-  }, []);
+  }, [setLoaded]);
 
   useFrame((state) => {
     if (groupRef.current) {

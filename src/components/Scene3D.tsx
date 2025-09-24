@@ -9,17 +9,25 @@ import { Vector3 } from 'three';
 import NorthBeachModel from './NorthBeachModel';
 import LoadingSpinner from './LoadingSpinner';
 import CTABox from './CTABox';
+import { useLoading } from '@/contexts/LoadingContext';
 
 function CameraAnimation() {
   const { camera } = useThree();
+  const { isLoaded } = useLoading();
   const startPosition = useRef(new Vector3(-10, 15, 15));
   const targetPosition = useRef(new Vector3(-2, 1, 2));
   const animationProgress = useRef(0);
-  const isAnimating = useRef(true);
+  const isAnimating = useRef(false);
 
   useEffect(() => {
     camera.position.copy(startPosition.current);
   }, [camera]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      isAnimating.current = true;
+    }
+  }, [isLoaded]);
 
   useFrame((state, delta) => {
     if (isAnimating.current && animationProgress.current < 1) {
@@ -354,7 +362,9 @@ export default function Scene3D() {
         </div>
       </div>
 
-      <Suspense fallback={<LoadingSpinner />}>
+      <LoadingSpinner />
+
+      <Suspense fallback={null}>
         <CTABox />
       </Suspense>
 

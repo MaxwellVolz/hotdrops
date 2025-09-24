@@ -10,13 +10,11 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
-  experimental: {
-    turbo: {
-      rules: {
-        '*.glb': {
-          loaders: ['file-loader'],
-          as: '*.js',
-        },
+  turbopack: {
+    rules: {
+      '*.glb': {
+        loaders: ['file-loader'],
+        as: '*.js',
       },
     },
   },
