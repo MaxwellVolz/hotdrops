@@ -99,7 +99,7 @@ type GLTFResult = GLTF & {
 
 export const Model = React.forwardRef<THREE.Group, JSX.IntrinsicElements['group']>((props, ref) => {
     const group = React.useRef<THREE.Group>(null)
-    const { nodes, materials } = useGLTF('/3d/north_beach_web.glb') as unknown as GLTFResult
+    const { nodes, materials } = useGLTF('/wassuh/3d/north_beach_web.glb') as unknown as GLTFResult
     return (
         <group ref={ref || group} {...props} dispose={null}>
             <group name="Scene">
@@ -184,4 +184,4 @@ export const Model = React.forwardRef<THREE.Group, JSX.IntrinsicElements['group'
 Model.displayName = 'Model'
 
 
-useGLTF.preload('/3d/north_beach_web.glb')
+useGLTF.preload('/wassuh/3d/north_beach_web.glb')

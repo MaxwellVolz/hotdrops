@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:webpack": "next dev",
-    "build": "next build --turbopack",
+    "build": "next build --turbopack && rm -rf ../intervolzdotcom/public/wassuh && cp -r out ../intervolzdotcom/public/wassuh",
     "start": "next start",
     "lint": "eslint"
   },

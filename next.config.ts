@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: '/wassuh',
+  output: 'export',
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {

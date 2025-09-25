@@ -22,7 +22,7 @@ const softColors = [
 
 const NorthBeachCustom = React.forwardRef<THREE.Group>((props, ref) => {
   const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF('/3d/north_beach_web.glb');
+  const { scene } = useGLTF('/wassuh/3d/north_beach_web.glb');
 
   useEffect(() => {
     if (groupRef.current && scene) {
@@ -81,4 +81,4 @@ NorthBeachCustom.displayName = 'NorthBeachCustom';
 
 export default NorthBeachCustom;
 
-useGLTF.preload('/3d/north_beach_web.glb');
+useGLTF.preload('/wassuh/3d/north_beach_web.glb');
