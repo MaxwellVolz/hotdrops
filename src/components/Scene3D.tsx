@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-three/postprocessing';
 import { Suspense, useRef, useEffect } from 'react';
 import * as THREE from 'three';
@@ -120,8 +120,6 @@ function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
 
     // Day/night cycle effects
     const sunHeight = y / radius; // -1 to 1
-    const dayIntensity = Math.max(0, sunHeight);
-    const nightIntensity = Math.max(0, -sunHeight);
 
     // Update scene background color with natural day/night progression
     if (scene.background instanceof THREE.Color) {
@@ -129,8 +127,6 @@ function OrbitingSun({ speed = 0.05 }: { speed?: number }) {
       const sunriseColor = new THREE.Color('#FF6B6B'); // Soft red sunrise
       const morningColor = new THREE.Color('#87CEEB'); // Sky blue morning
       const noonColor = new THREE.Color('#87CEFA'); // Light sky blue noon
-      const eveningColor = new THREE.Color('#FFA500'); // Orange evening
-      const sunsetColor = new THREE.Color('#FF4500'); // Red orange sunset
       const twilightColor = new THREE.Color('#8A2BE2'); // Blue violet twilight
       const nightColor = new THREE.Color('#0B0B0F'); // Very dark blue night
 

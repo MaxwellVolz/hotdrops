@@ -64,7 +64,6 @@ export default function NorthBeachModel() {
               // Group vertices by approximate building positions and assign colors
               for (let i = 0; i < positionAttribute.count; i++) {
                 const x = positionAttribute.getX(i);
-                const y = positionAttribute.getY(i);
                 const z = positionAttribute.getZ(i);
 
                 // Use position to determine which "building" this vertex belongs to

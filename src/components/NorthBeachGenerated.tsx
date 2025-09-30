@@ -4,7 +4,7 @@ Command: npx gltfjsx@6.5.3 /home/narfa/_git/hotdrops/public/3d/north_beach_web.g
 */
 
 import * as THREE from 'three'
-import React, { JSX, useEffect, useRef } from 'react'
+import React, { JSX } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 
