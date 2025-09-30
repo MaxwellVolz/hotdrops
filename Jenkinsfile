@@ -30,7 +30,7 @@ pipeline {
 
         stage('Deploy to Nginx') {
             steps {
-                sh 'sudo /usr/local/bin/deploy_site.sh wassuh out'
+                sh 'sudo /usr/local/bin/deploy_blog.sh wassuh out'
             }
         }
 
