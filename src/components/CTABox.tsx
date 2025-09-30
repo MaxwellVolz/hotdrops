@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useLoading } from '@/contexts/LoadingContext';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function CTABox() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,16 +23,46 @@ export default function CTABox() {
     }
   }, [isLoaded]);
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     setIsLoading(true);
 
-    // Simulate purchase process
-    setTimeout(() => {
-      const nextSerial = Math.floor(Math.random() * 63) + 188; // Random number between 188-250
-      setSerialNumber(nextSerial);
-      setShowConfirmation(true);
+    try {
+      // Create checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+
+      const { sessionId, error } = await response.json();
+
+      if (error) {
+        console.error('Checkout error:', error);
+        alert('Payment error. Please try again.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      if (stripe) {
+        const { error: stripeError } = await stripe.redirectToCheckout({
+          sessionId,
+        });
+
+        if (stripeError) {
+          console.error('Stripe redirect error:', stripeError);
+          alert('Payment error. Please try again.');
+        }
+      }
+    } catch (err) {
+      console.error('Purchase error:', err);
+      alert('Payment error. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   if (showConfirmation) {
@@ -81,7 +114,7 @@ export default function CTABox() {
               Processing...
             </div>
           ) : (
-            'Buy Now - $49.99'
+            'Buy Now - $42.00'
           )}
         </button>
       </div>

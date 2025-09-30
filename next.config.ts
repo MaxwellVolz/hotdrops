@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: '/wassuh',
-  output: 'export',
+  // basePath: '/wassuh', // Removed - serving from root for wassuh.com
+  // output: 'export', // Disabled for API routes (Stripe)
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {

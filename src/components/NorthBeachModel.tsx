@@ -29,7 +29,7 @@ export default function NorthBeachModel() {
   const { setLoaded } = useLoading();
 
   // Load the GLB with animations
-  const { animations } = useGLTF('/wassuh/3d/north_beach_web.glb');
+  const { animations } = useGLTF('/3d/north_beach_web.glb');
   const { actions } = useAnimations(animations, modelRef);
 
   useEffect(() => {
