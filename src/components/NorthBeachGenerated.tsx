@@ -44,7 +44,7 @@ type GLTFResult = GLTF & {
   animations: GLTFAction[]
 }
 
-export function Model(props: JSX.IntrinsicElements['group']) {
+export function Model(props: React.ComponentProps<'group'>) {
   const group = React.useRef<THREE.Group>()
   const { nodes, materials, animations } = useGLTF('/3d/north_beach_web.glb') as GLTFResult
   const { actions } = useAnimations(animations, group)
