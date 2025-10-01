@@ -45,3 +45,9 @@ public/
 - `npm run build` - Production build
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+
+## Stripe Integration
+
+### Test locally with **Stripe CLI**
+
+1. 
