@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useLoading } from '@/contexts/LoadingContext';
 
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_7sY9AS5VZ4IX7vOeke33W00';
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/14A6oG3H8dV04e6g9w9k400';
 
 export default function CTABox() {
   const [isVisible, setIsVisible] = useState(false);
