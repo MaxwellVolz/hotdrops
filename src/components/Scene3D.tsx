@@ -341,14 +341,11 @@ export default function Scene3D() {
       {/* Premium header */}
       <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10 transition-all duration-500">
         <div className="backdrop-blur-xl bg-gradient-to-br from-white/15 to-white/5 p-3 md:p-6 rounded-xl border border-white/10 shadow-2xl shadow-black/20 hover:shadow-black/30 transition-all duration-300">
-          <h1 className="text-2xl md:text-4xl font-bold text-white mb-1 md:mb-2 flex items-start gap-2 tracking-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-1 md:mb-2 tracking-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
             Coit Cache
-            <span className="text-[10px] md:text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-0.5 rounded-full font-bold animate-pulse shadow-lg shadow-orange-500/50">
-              69 left
-            </span>
           </h1>
-          <p className="text-blue-100/90 text-xs md:text-sm font-medium tracking-wide" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.2)' }}>
-            Limited by Design
+          <p className="text-blue-100/90 text-xs md:text-sm font-medium tracking-wide max-w-xs" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.2)' }}>
+            A pocket-sized Coit Tower. Store your keepsakes in a San Francisco icon.
           </p>
         </div>
       </div>

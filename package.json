@@ -7,7 +7,8 @@
     "dev:webpack": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "convert-glb": "npx gltfjsx@6.5.3 public/3d/north_beach_web.glb --output src/components/NorthBeachGenerated.tsx --types --keepgroups && sed -i \"s|'/north_beach_web.glb'|'/3d/north_beach_web.glb'|g\" src/components/NorthBeachGenerated.tsx"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",

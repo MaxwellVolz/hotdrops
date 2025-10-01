@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "wassuh - its wassuh",
-  description: "Product showcase of limited drop runs",
+  title: "Coit Cache - Limited Edition Collectible",
+  description: "Limited by design. Coit Cache collectible - only 250 made. A unique piece of San Francisco history.",
   metadataBase: new URL("https://wassuh.com"),
   openGraph: {
-    title: "wassuh - its wassuh",
-    description: "Product showcase of limited drop runs",
+    title: "Coit Cache - Limited Edition Collectible",
+    description: "Limited by design. Coit Cache collectible - only 250 made.",
     url: "https://wassuh.com",
     siteName: "wassuh",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "wassuh - its wassuh",
-    description: "Product showcase of limited drop runs",
+    title: "Coit Cache - Limited Edition Collectible",
+    description: "Limited by design. Only 250 made.",
   },
 };
 
