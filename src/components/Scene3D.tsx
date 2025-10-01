@@ -339,7 +339,7 @@ export default function Scene3D() {
       </Canvas>
 
       {/* Premium header */}
-      <div className="absolute top-4 left-4 right-4 md:left-6 md:right-auto md:top-6 z-10 transition-all duration-500">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 md:left-6 md:translate-x-0 md:top-6 z-10 transition-all duration-500 w-[calc(100%-2rem)] md:w-auto max-w-md md:max-w-none">
         <div className="backdrop-blur-xl bg-gradient-to-br from-white/15 to-white/5 p-3 md:p-6 rounded-xl border border-white/10 shadow-2xl shadow-black/20 hover:shadow-black/30 transition-all duration-300 text-center md:text-left">
           <h1 className="text-2xl md:text-4xl font-bold text-white mb-1 md:mb-2 tracking-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
             Coit Cache
