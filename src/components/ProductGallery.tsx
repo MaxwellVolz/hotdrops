@@ -89,7 +89,7 @@ export default function ProductGallery() {
                   key={idx}
                   className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10"
                 >
-                  <p className="text-white/90 text-sm mb-2 italic">"{review.text}"</p>
+                  <p className="text-white/90 text-sm mb-2 italic">&ldquo;{review.text}&rdquo;</p>
                   <p className="text-white/60 text-xs">— {review.author}</p>
                 </div>
               ))}
