@@ -9,6 +9,7 @@ import { Vector3 } from 'three';
 import NorthBeachModel from './NorthBeachModel';
 import LoadingSpinner from './LoadingSpinner';
 import CTABox from './CTABox';
+import ProductGallery from './ProductGallery';
 import { useLoading } from '@/contexts/LoadingContext';
 
 function CameraAnimation() {
@@ -355,6 +356,8 @@ export default function Scene3D() {
       <Suspense fallback={null}>
         <CTABox />
       </Suspense>
+
+      <ProductGallery />
 
       <div className="hidden md:block absolute top-4 right-4 md:top-6 md:right-6 z-10">
         <div className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 px-3 py-2 rounded-xl border border-white/10 shadow-lg">
