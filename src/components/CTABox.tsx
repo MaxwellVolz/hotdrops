@@ -33,7 +33,7 @@ export default function CTABox() {
           className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 md:py-4 px-6 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 font-bold text-base md:text-lg shadow-2xl shadow-green-500/30 transform hover:scale-[1.02] active:scale-[0.98] ring-2 ring-green-400/50 tracking-wide"
           style={{ textShadow: '0 1px 4px rgba(0,0,0,0.2)' }}
         >
-          Buy Now - $42.00
+          Buy Now - $22 + $5 (shipping)
         </button>
       </div>
     </div>
