@@ -47,7 +47,7 @@ type GLTFResult = GLTF & {
 export function Model(props: React.ComponentProps<'group'>) {
   const group = React.useRef<THREE.Group>(null!)
   const { nodes, materials, animations } = useGLTF('/3d/north_beach_web.glb') as unknown as GLTFResult
-  useAnimations(animations, group)
+  const { actions } = useAnimations(animations, group)
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">

@@ -10,8 +10,8 @@ const SAMPLE_IMAGES = [
 
 const REVIEWS = [
   { text: "I've lived in SF for 30 years and I've never seen anything like this!", author: "Sergio" },
-  { text: "This is cool.", author: "Ben" },
-  { text: "Can I have this? I want this.", author: "Miami" },
+  { text: "Very cute.", author: "Paul" },
+  { text: "Really cute.", author: "John" },
 ];
 
 export default function ProductGallery() {
