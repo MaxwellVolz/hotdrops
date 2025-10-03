@@ -10,7 +10,7 @@ const SAMPLE_IMAGES = [
 
 const REVIEWS = [
   { text: "I've lived in SF for 30 years and I've never seen anything like this!", author: "Sergio" },
-  { text: "Very cute.", author: "Paul" },
+  { text: "Is this the best website on the internet? Um. Yeah. I think it is." author: "Tom" },
   { text: "Really cute.", author: "John" },
 ];
 
