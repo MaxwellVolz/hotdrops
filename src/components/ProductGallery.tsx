@@ -14,7 +14,12 @@ const REVIEWS = [
   { text: "Really cute.", author: "John" },
 ];
 
-export default function ProductGallery() {
+interface ProductGalleryProps {
+  rainEnabled: boolean;
+  toggleRain: () => void;
+}
+
+export default function ProductGallery({ rainEnabled, toggleRain }: ProductGalleryProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -97,7 +102,7 @@ export default function ProductGallery() {
           </div>
 
           {/* About the Artist */}
-          <div>
+          <div className="mb-10">
             <h3 className="text-lg font-semibold text-white mb-3">About the Artist</h3>
             <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
               <p className="text-white/80 text-sm leading-relaxed mb-3">
@@ -107,6 +112,16 @@ export default function ProductGallery() {
                 Coit Cache is his way of capturing the spirit of the city.
               </p>
             </div>
+          </div>
+
+          {/* Weather Controls */}
+          <div>
+            <button
+              onClick={toggleRain}
+              className="w-full text-4xl py-2 hover:scale-110 transition-all duration-300 flex items-center justify-center"
+            >
+              {rainEnabled ? '🌧️' : '☀️'}
+            </button>
           </div>
         </div>
       </div>

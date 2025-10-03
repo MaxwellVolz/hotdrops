@@ -3,7 +3,7 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-three/postprocessing';
-import { Suspense, useRef, useEffect } from 'react';
+import { Suspense, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { Vector3 } from 'three';
 import NorthBeachModel from './NorthBeachModel';
@@ -274,6 +274,12 @@ function OrbitingMoon({ speed = 0.05 }: { speed?: number }) {
 
 
 export default function Scene3D() {
+  const [rainEnabled, setRainEnabled] = useState(false);
+
+  const toggleRain = () => {
+    setRainEnabled(!rainEnabled);
+  };
+
   return (
     <div className="w-full h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 relative overflow-hidden">
       {/* Background elements */}
@@ -295,7 +301,7 @@ export default function Scene3D() {
 
           <NorthBeachModel />
 
-          <Weather enabled={true} intensity={0.5} />
+          <Weather enabled={rainEnabled} intensity={0.5} />
 
           {/* Soft spotlight on Coit Tower at 0,0,0 */}
           <spotLight
@@ -360,7 +366,7 @@ export default function Scene3D() {
         <CTABox />
       </Suspense>
 
-      <ProductGallery />
+      <ProductGallery rainEnabled={rainEnabled} toggleRain={toggleRain} />
 
       <div className="hidden md:block absolute top-4 right-4 md:top-6 md:right-6 z-10">
         <div className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 px-3 py-2 rounded-xl border border-white/10 shadow-lg">
