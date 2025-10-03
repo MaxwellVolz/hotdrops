@@ -10,6 +10,7 @@ import NorthBeachModel from './NorthBeachModel';
 import LoadingSpinner from './LoadingSpinner';
 import CTABox from './CTABox';
 import ProductGallery from './ProductGallery';
+import Weather from './Weather';
 import { useLoading } from '@/contexts/LoadingContext';
 
 function CameraAnimation() {
@@ -293,6 +294,8 @@ export default function Scene3D() {
 
 
           <NorthBeachModel />
+
+          <Weather enabled={true} intensity={0.5} />
 
           {/* Soft spotlight on Coit Tower at 0,0,0 */}
           <spotLight
