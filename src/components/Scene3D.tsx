@@ -320,11 +320,11 @@ export default function Scene3D() {
 
           <OrbitControls
             target={[0, 0, 0]}
-            enablePan={false}
+            enablePan={true}
             enableZoom={true}
             enableRotate={true}
-            minDistance={1}
-            maxDistance={10}
+            minDistance={0.5}
+            maxDistance={20}
             maxPolarAngle={Math.PI / 2}
             autoRotate
             autoRotateSpeed={0.2}
