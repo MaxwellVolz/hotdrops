@@ -117,6 +117,7 @@ const BuyModal = ({ isOpen, onClose }: BuyModalProps) => {
                     width={96}
                     height={96}
                     className="w-20 h-20 md:w-24 md:h-24 rounded-lg object-cover bg-white/20"
+                    unoptimized
                   />
                 </div>
                 <div className="flex-1">

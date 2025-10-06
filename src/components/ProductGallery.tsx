@@ -62,6 +62,7 @@ export default function ProductGallery({ rainEnabled, toggleRain }: ProductGalle
                 width={400}
                 height={400}
                 className="w-full h-full object-cover"
+                unoptimized
               />
             </div>
 
