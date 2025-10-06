@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 const SAMPLE_IMAGES = [
   '/product/coit-1.jpg',
@@ -55,14 +56,12 @@ export default function ProductGallery({ rainEnabled, toggleRain }: ProductGalle
           {/* Image Gallery */}
           <div className="mb-6">
             <div className="aspect-square bg-white/5 rounded-xl mb-3 overflow-hidden">
-              <img
+              <Image
                 src={SAMPLE_IMAGES[currentImage]}
                 alt={`Product ${currentImage + 1}`}
+                width={400}
+                height={400}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  // Fallback to placeholder if image doesn't exist
-                  e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23374151" width="400" height="400"/%3E%3Ctext fill="%239CA3AF" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18"%3EAdd product photo%3C/text%3E%3C/svg%3E';
-                }}
               />
             </div>
 

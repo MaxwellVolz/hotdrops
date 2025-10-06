@@ -1,21 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 interface BuyModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface BuyOption {
-  id: string;
-  title: string;
-  description: string;
-  price: string;
-  priceBreakdown: string | null;
-  image: string;
-  link: string;
-}
 
 const BuyModal = ({ isOpen, onClose }: BuyModalProps) => {
 
@@ -33,42 +25,46 @@ const BuyModal = ({ isOpen, onClose }: BuyModalProps) => {
 
   if (!isOpen) return null;
 
-  const buyOptions = [
+  const productSections = [
     {
-      id: 'standard-shipping',
-      title: 'Coit Cache + Shipping',
-      description: 'Limited edition collectible delivered to your door',
-      price: '$27',
-      priceBreakdown: '$22 + $5 shipping',
+      id: 'standard',
+      title: 'Coit Cache',
+      description: 'Limited edition collectible - a pocket-sized Coit Tower.',
       image: '/product/coit-1.jpg',
-      link: 'https://buy.stripe.com/aFa4gyb9A7wC7qie1o9k402'
+      buttons: [
+        {
+          id: 'standard-pickup',
+          title: 'Local Pickup',
+          price: '$22',
+          link: 'https://buy.stripe.com/7sY9AS5Pg7wC25Y9L89k406'
+        },
+        {
+          id: 'standard-shipping',
+          title: 'With Shipping',
+          price: '$22 + $5',
+          link: 'https://buy.stripe.com/aFa4gyb9A7wC7qie1o9k402'
+        }
+      ]
     },
     {
-      id: 'standard-pickup',
-      title: 'Coit Cache - Local Pickup',
-      description: 'Pick up your limited edition collectible at Mr. Bings during the next 49ers game.',
-      price: '$20',
-      priceBreakdown: null,
+      id: 'adult',
+      title: 'Adult Version',
+      description: 'Includes slots for "candy" cigarettes or mini colored pencils.',
       image: '/product/coit-1.jpg',
-      link: 'https://buy.stripe.com/8x228q6TkdV025Y7D09k404'
-    },
-    {
-      id: 'adult-shipping',
-      title: 'Adult Version + Shipping',
-      description: 'Includes slots for "candy" cigarettes or mini colored pencils',
-      price: '$27',
-      priceBreakdown: '$22 + $5 shipping',
-      image: '/product/coit-1.jpg',
-      link: 'https://buy.stripe.com/9B65kC2D44kq6me3mK9k405'
-    },
-    {
-      id: 'adult-pickup',
-      title: 'Adult Version - Local Pickup',
-      description: 'Adult version with slots for accessories. Local pickup at Mr. Bings during the next 49ers game.',
-      price: '$20',
-      priceBreakdown: null,
-      image: '/product/coit-1.jpg',
-      link: 'https://buy.stripe.com/3cIbJ05Pg6sy6me7D09k403'
+      buttons: [
+        {
+          id: 'adult-pickup',
+          title: 'Local Pickup',
+          price: '$22',
+          link: 'https://buy.stripe.com/cNi9AS4Lc6sy7qi7D09k407'
+        },
+        {
+          id: 'adult-shipping',
+          title: 'With Shipping',
+          price: '$22 + $5',
+          link: 'https://buy.stripe.com/9B65kC2D44kq6me3mK9k405'
+        }
+      ]
     }
   ];
 
@@ -106,44 +102,41 @@ const BuyModal = ({ isOpen, onClose }: BuyModalProps) => {
           </p>
         </div>
 
-        {/* Buy Options */}
-        <div className="grid gap-4 md:gap-6">
-          {buyOptions.map((option) => (
+        {/* Product Sections */}
+        <div className="grid gap-6 md:gap-8">
+          {productSections.map((section) => (
             <div
-              key={option.id}
-              className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
+              key={section.id}
+              className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20"
             >
-              <div className="flex items-start gap-4 mb-4">
+              <div className="flex items-start gap-4 mb-6">
                 <div className="flex-shrink-0">
-                  <img
-                    src={option.image}
-                    alt={option.title}
+                  <Image
+                    src={section.image}
+                    alt={section.title}
+                    width={96}
+                    height={96}
                     className="w-20 h-20 md:w-24 md:h-24 rounded-lg object-cover bg-white/20"
                   />
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold text-white">{option.title}</h3>
-                    <div className="text-right">
-                      <span className="text-2xl font-bold text-green-400">{option.price}</span>
-                      {option.priceBreakdown && (
-                        <div className="text-sm text-white/60">{option.priceBreakdown}</div>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-white/70 text-sm md:text-base">{option.description}</p>
+                  <h3 className="text-2xl font-bold text-white mb-2">{section.title}</h3>
+                  <p className="text-white/70 text-sm md:text-base">{section.description}</p>
                 </div>
               </div>
-              <button
-                onClick={() => handlePurchase(option.link)}
-                disabled={option.link === '#'}
-                className={`w-full py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 ${option.link === '#'
-                  ? 'bg-gray-500/50 text-gray-300 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-500/30'
-                  }`}
-              >
-                {option.link === '#' ? 'Coming Soon' : 'Buy Now'}
-              </button>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {section.buttons.map((button) => (
+                  <button
+                    key={button.id}
+                    onClick={() => handlePurchase(button.link)}
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 font-bold text-lg transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-500/30 flex items-center justify-between"
+                  >
+                    <span>{button.title}</span>
+                    <span className="text-green-100">{button.price}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
         </div>
